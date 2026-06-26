@@ -1,14 +1,35 @@
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
+import emailjs from "@emailjs/browser";
 import { motion } from "motion/react";
 import { Section } from "./Section.tsx";
 import { Mail, Users, GitBranch, Send, Briefcase, Check } from "lucide-react";
 export function Contact() {
   const [sent, setSent] = useState(false);
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const formRef = useRef<HTMLFormElement>(null);
+const onSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+
+  if (!formRef.current) return;
+
+  try {
+    await emailjs.sendForm(
+      "service_m1gnyb8",
+      "template_uh7ghts",
+      formRef.current,
+      "MV8kNfLQ7jEfTllrT"
+    );
+
     setSent(true);
-    setTimeout(() => setSent(false), 4000);
-  };
+    formRef.current.reset();
+
+    setTimeout(() => {
+      setSent(false);
+    }, 4000);
+  } catch (error) {
+    console.error("EmailJS Error:", error);
+    alert("Failed to send message. Please try again.");
+  }
+};
   return (
     <Section
       id="contact"
@@ -47,6 +68,7 @@ export function Contact() {
           ))}
         </motion.div>
         <motion.form
+          ref={formRef}
           onSubmit={onSubmit}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -55,13 +77,14 @@ export function Contact() {
           className="glass neon-border lg:col-span-3 rounded-2xl p-6 space-y-4"
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Name" placeholder="Your name" />
-            <Field label="Email" type="email" placeholder="you@email.com" />
+           <Field name="name"label="Name"placeholder="Your name"/>
+            <Field name="email" label="Email"type="email"placeholder="you@email.com"/>
           </div>
-          <Field label="Subject" placeholder="Let's collaborate on..." />
+          <Field name="subject"  label="Subject"  placeholder="Let's collaborate on..."/>
           <div className="space-y-1.5">
             <label className="text-xs uppercase tracking-widest text-muted-foreground">Message</label>
             <textarea
+            name="message"
               required
               rows={5}
               placeholder="Tell me about your project, role, or idea..."

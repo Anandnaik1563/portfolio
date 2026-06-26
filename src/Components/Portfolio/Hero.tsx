@@ -89,12 +89,13 @@ export function Hero() {
             View Projects
           </button>
           <a
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className="glass neon-border inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold hover:bg-primary/10 transition"
-          >
-            <Download className="h-4 w-4" /> Download Resume
-          </a>
+  href="/Anand_Nayak_Resume.pdf"
+  download
+  className="glass neon-border inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold"
+>
+  <Download className="h-4 w-4" />
+  Download Resume
+</a>
           <button
             onClick={() => go("contact")}
             className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold hover:border-accent hover:text-accent transition"
